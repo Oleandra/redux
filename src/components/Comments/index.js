@@ -5,7 +5,7 @@ import Tabla from './Tabla';
 import Loader from '../loader/Loader';
 import Fatal from '../loader/Fatal';
 import { Link } from 'react-router-dom';
-import Agregar from './Agregar'
+import Agregar from './Agregar';
 import * as commentsActions from '../../actions/commentsActions';
 
 
@@ -22,18 +22,13 @@ class index extends Component {
       <td>{comentario.email}</td>
       <td>{comentario.body}</td>
       <td>
-      <Modal
-            header='Modal Header'
-            fixedFooter
-            trigger={
-                <a className="pointer">
-                     <Icon>edit</Icon>
-                </a>
-            }
-        >
-            
-          hola
-      </Modal>
+      
+          <Link 
+                to={`/comments/editar/${comentario.id}`} 
+                className="pointer"
+          >
+                <Icon>edit</Icon>
+          </Link>
       </td>
       
     </tr>

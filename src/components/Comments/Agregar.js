@@ -1,24 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Input, Row, Icon, Button } from 'react-materialize';
 import { connect } from 'react-redux';
 import * as commentsActions from '../../actions/commentsActions';
 import { CAMBIO_TITULO, CAMBIO_CONTENIDO } from '../../types/Commentypes';
 import Loader  from '../loader/Loader'
 
-const Guardar = (props) =>{
-
-const localCambioInput =(event, caso)=> {
-    props.cambioInput(caso, event.target.value);
-}
-const localGuardar =(event)=>{
-  const { titulo, contenido } = props;
-  const cuerpo = {
-    title: props.titulo,
-    body: props.contenido
+class Guardar extends Component {
+componentDidMount() {
+  if (this.props.match.params.id)
+      this.props.traerUnComentario(this.props.match.params.id);
+  else {
+    this.props.cambioInput(CAMBIO_TITULO, '');
+    this.props.cambioInput(CAMBIO_CONTENIDO, '');
   }
-  props.agregar(cuerpo); 
+}
+
+localCambioInput =(event, caso)=> {
+    this.props.cambioInput(caso, event.target.value);
+}
+localGuardar =(event)=>{
+  const { titulo, contenido } = this.props;
+  const cuerpo = {
+    title: this.props.titulo,
+    body: this.props.contenido
+  }
+
+const id = this.props.match.params.id
+
+  if(id)
+     this.props.editar(cuerpo, id);
+  else
+     this.props.agregar(cuerpo); 
 };
 
+
+render() {
   return (
     <div>
       <Row>
@@ -26,9 +42,9 @@ const localGuardar =(event)=>{
               s={12} 
               m={6} 
               label="Title" 
-              value={props.titulo} 
+              value={this.props.titulo} 
               onChange={ 
-                (event)=> localCambioInput(event, CAMBIO_TITULO)
+                (event)=> this.localCambioInput(event, CAMBIO_TITULO)
               
               }
           >
@@ -41,9 +57,9 @@ const localGuardar =(event)=>{
               m={12} 
               label="Contenido" 
               type="textarea" 
-              value={props.contenido}
+              value={this.props.contenido}
               onChange={ 
-                (event)=> localCambioInput(event, CAMBIO_CONTENIDO)
+                (event)=> this.localCambioInput(event, CAMBIO_CONTENIDO)
               
               }
               >
@@ -52,23 +68,25 @@ const localGuardar =(event)=>{
          </Input>
 
       </Row>
-      {props.mensaje}
+      {this.props.mensaje}
       <Row className="center-align">
           <Button 
-          className= {(props.loading) ? 'disabled' : '' }
+          className= {(this.props.loading) ? 'disabled' : '' }
           waves='light'
-          onClick={ localGuardar }
+          onClick={ this.localGuardar }
           >
           Guardar
           <Icon left>save</Icon>
           </Button>
       </Row>
 
-      {(props.loading) ? <Loader /> : '' }
+      {(this.props.loading) ? <Loader /> : '' }
     
 
     </div>
   )
+}
+  
 };
 
 const mapStateToProps = ({ commentsReducers }) => commentsReducers;

@@ -18,6 +18,7 @@ class App extends Component {
                 <Route exact path='/' component={Comments}/>
                 <Route exact path='/users' component={Fotos}/>
                 <Route exact path='/comments/guardar' component={Guardar}/>
+                <Route exact path='/comments/editar/:id' component={Guardar}/>
             </Switch>
             </div>
         </div>
